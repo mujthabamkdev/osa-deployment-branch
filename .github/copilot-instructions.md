@@ -1,4 +1,4 @@
-## Project instructions
+## Project overall instructions
 
 - dont restart the server if already running
   for front end and back end
@@ -6,8 +6,7 @@
 - Do not push the or commit the code I will give seperate command to do it
 - Always looks for the best and simple solution
 - Always follow the best practices
-- Never stop 4200 if it is already running
-- Never stop 8000 if it is already running
+- Never reload server and test testing will be done maually
 
 ### Angular and TS
 
