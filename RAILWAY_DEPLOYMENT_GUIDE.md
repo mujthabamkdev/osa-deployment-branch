@@ -25,29 +25,16 @@ OSA/
 
 ## Railway Configuration Files
 
-### Root Configuration (railway.json)
-```json
-{
-  "services": {
-    "backend": "railway.backend.json",
-    "frontend": "railway.frontend.json"
-  }
-}
+### Root Configuration (railway.toml)
+```toml
+[services.backend]
+path = "osa-backend"
+
+[services.frontend]
+path = "osa-frontend"
 ```
 
-### Service-Specific Configurations
-**Backend (railway.backend.json):**
-```json
-### Backend Configuration (osa-backend/railway.json)
-```json
-{
-  "$schema": "https://railway.com/railway.schema.json",
-  "build": {
-    "builder": "RAILPACK"
-  },
-  "deploy": {
-    "runtime": "V2",
-    "numReplicas": 1,
+This file explicitly defines the services in your monorepo for Railway to detect properly.
     "sleepApplication": false,
     "useLegacyStacker": false,
     "multiRegionConfig": {
@@ -188,10 +175,15 @@ After deployment, you'll have:
 ### Common Issues:
 1. **"Script start.sh not found" or "Railpack could not determine how to build the app"**:
    - **Cause**: Railway is not detecting your monorepo structure properly
-   - **Solution**: Ensure `railway.json` files exist in each service directory:
-     - `osa-backend/railway.json`
-     - `osa-frontend/railway.json`
-   - **Check**: Verify the files use the correct schema `"https://railway.com/railway.schema.json"` and `RAILPACK` builder
+   - **Solution**: Ensure `railway.toml` exists in the root directory with service definitions
+   - **Check**: Verify the file contains:
+     ```toml
+     [services.backend]
+     path = "osa-backend"
+
+     [services.frontend]
+     path = "osa-frontend"
+     ```
 
 2. **Port Configuration**: Railway uses `$PORT` environment variable
 3. **CORS Issues**: Update `CORS_ORIGINS` with the frontend URL
