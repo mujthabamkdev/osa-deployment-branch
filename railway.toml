@@ -1,5 +1,0 @@
-[services.backend]
-path = "osa-backend"
-
-[services.frontend]
-path = "osa-frontend"

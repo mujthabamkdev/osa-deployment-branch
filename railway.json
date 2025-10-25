@@ -1,14 +1,6 @@
 {
   "services": {
-    "backend": {
-      "source": {
-        "path": "osa-backend"
-      }
-    },
-    "frontend": {
-      "source": {
-        "path": "osa-frontend"
-      }
-    }
+    "backend": "railway.backend.json",
+    "frontend": "railway.frontend.json"
   }
 }
