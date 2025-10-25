@@ -1,0 +1,72 @@
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.card {
+  border: 1px solid rgba(var(--color-teal-500-rgb), 0.12);
+  border-radius: 1rem;
+  background-color: var(--color-surface);
+}
+
+.card-header {
+  padding: 1rem 1.5rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  width: 2px;
+  background-color: rgba(var(--color-teal-500-rgb), 0.25);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -0.1rem;
+  top: 0.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--color-teal-500-rgb), 0.12);
+}
+
+.timeline-content {
+  margin-left: 1.5rem;
+  background-color: rgba(var(--color-teal-500-rgb), 0.08);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.table thead th {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(var(--color-slate-500-rgb), 0.75);
+}
+
+.badge.bg-secondary {
+  background-color: rgba(var(--color-teal-500-rgb), 0.12) !important;
+  color: rgba(var(--color-slate-500-rgb), 0.9);
+}

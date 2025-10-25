@@ -1,6 +1,0 @@
-{
-  "services": {
-    "backend": "railway.backend.json",
-    "frontend": "railway.frontend.json"
-  }
-}

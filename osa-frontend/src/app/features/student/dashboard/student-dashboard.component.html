@@ -1,0 +1,290 @@
+<div class="dashboard-shell">
+  <section class="dashboard-hero">
+    <div class="hero-content">
+      <span class="hero-label">Learning Journey</span>
+      <h1 class="hero-title">
+        Assalamu alaikum,
+        <span class="hero-highlight">
+          {{ authService.user()?.full_name || authService.user()?.email }}
+        </span>
+      </h1>
+      <p class="hero-subtitle">
+        Pick up where you left off, review your lessons, and stay on track with your studies.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <i class="bi bi-journal-bookmark"></i>
+          <div>
+            <span class="stat-label">Courses</span>
+            <span class="stat-value">{{ stats().enrolledCourses }}</span>
+          </div>
+        </div>
+        <div class="stat-pill">
+          <i class="bi bi-lightning-charge"></i>
+          <div>
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value">{{ stats().inProgressCourses }}</span>
+          </div>
+        </div>
+        <div class="stat-pill">
+          <i class="bi bi-activity"></i>
+          <div>
+            <span class="stat-label">Overall</span>
+            <span class="stat-value">{{ stats().totalProgress }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn btn-primary" type="button" (click)="viewMyCourses()">
+        <i class="bi bi-play-circle me-1"></i>
+        Continue learning
+      </button>
+      <button class="btn btn-outline-light" type="button" (click)="openNotesModal()">
+        <i class="bi bi-pencil me-1"></i>
+        Quick note
+      </button>
+      <button class="btn btn-outline-light" type="button" (click)="refreshData()" [disabled]="loading()">
+        <i class="bi bi-arrow-clockwise me-1" [class.spinning]="loading()"></i>
+        Refresh
+      </button>
+    </div>
+  </section>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading dashboard</span>
+      </div>
+      <p class="loading-text">Preparing your personalised dashboard…</p>
+    </div>
+  } @else {
+    <section class="dashboard-section">
+      <header class="section-header">
+        <div>
+          <h2 class="section-title">Active courses</h2>
+          <p class="section-subtitle">Continue with your enrolled classes and track progress in real time.</p>
+        </div>
+        <button class="btn btn-outline-primary" type="button" (click)="viewAllCourses()">
+          Browse catalogue
+        </button>
+      </header>
+
+      @if (enrolledCourses().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="bi bi-collection-play"></i>
+          </div>
+          <h3 class="empty-title">No enrolled courses yet</h3>
+          <p class="empty-description">
+            Explore the course library and join a class to start your learning journey.
+          </p>
+          <button class="btn btn-primary" type="button" (click)="goToHome()">
+            Discover courses
+          </button>
+        </div>
+      } @else {
+        <div class="course-grid">
+          @for (course of enrolledCourses(); track course.id) {
+            <article
+              class="course-card"
+              [class.course-card--disabled]="!isCourseAccessible(course)"
+              tabindex="0"
+              role="button"
+              (click)="isCourseAccessible(course) && viewCourse(course.id)"
+              (keydown.enter)="onCourseCardKeydown($event, course)"
+              (keydown.space)="onCourseCardKeydown($event, course)"
+              [attr.aria-disabled]="!isCourseAccessible(course)"
+            >
+              <div class="course-card__header">
+                <div>
+                  <h3 class="course-card__title">{{ course.title }}</h3>
+                  <p class="course-card__meta">
+                    <i class="bi bi-clock-history me-1"></i>
+                    Updated {{ formatDate(course.lastAccessed) }}
+                  </p>
+                </div>
+                <span
+                  class="status-pill"
+                  [class.bg-success]="getStatusBadgeClass(course.status) === 'bg-success'"
+                  [class.bg-warning]="getStatusBadgeClass(course.status) === 'bg-warning'"
+                  [class.bg-secondary]="getStatusBadgeClass(course.status) === 'bg-secondary'"
+                >
+                  {{ getStatusText(course.status) }}
+                </span>
+              </div>
+
+              <p class="course-card__description">{{ course.description }}</p>
+
+              @if (course.active_class_title) {
+                <div class="course-card__active">
+                  <i class="bi bi-broadcast me-1"></i>
+                  {{ course.active_class_title }}
+                </div>
+              }
+
+              <div class="course-card__progress">
+                <div class="progress-labels">
+                  <span>Progress</span>
+                  <span>{{ course.progress }}%</span>
+                </div>
+                <div class="progress-track">
+                  <div
+                    class="progress-fill"
+                    [class.bg-success]="getProgressBarClass(course.progress) === 'bg-success'"
+                    [class.bg-warning]="getProgressBarClass(course.progress) === 'bg-warning'"
+                    [class.bg-info]="getProgressBarClass(course.progress) === 'bg-info'"
+                    [style.width.%]="course.progress"
+                  ></div>
+                </div>
+              </div>
+
+              @if (course.levels && course.levels.length > 0) {
+                <div class="course-card__levels">
+                  @for (level of course.levels.slice(0, 3); track level.id) {
+                    <span class="level-pill">
+                      <i class="bi bi-layer me-1"></i>{{ level.title }}
+                    </span>
+                  }
+                  @if (course.levels.length > 3) {
+                    <span class="level-pill level-pill--more">+{{ course.levels.length - 3 }}</span>
+                  }
+                </div>
+              }
+
+              <div class="course-card__actions">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  type="button"
+                  [disabled]="!isCourseAccessible(course)"
+                  (click)="isCourseAccessible(course) && viewCourse(course.id); $event.stopPropagation()"
+                >
+                  {{ isCourseAccessible(course) ? 'Open class' : 'Locked' }}
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="dashboard-section">
+      <header class="section-header">
+        <div>
+          <h2 class="section-title">Recent activity</h2>
+          <p class="section-subtitle">Quick glance at the lessons and quizzes you recently touched.</p>
+        </div>
+      </header>
+
+      @if (recentProgress().length === 0) {
+        <div class="empty-state empty-state--subtle">
+          <p class="empty-description mb-0">Your recent learning activity will show here once you complete lessons.</p>
+        </div>
+      } @else {
+        <div class="activity-list">
+          @for (entry of recentProgress(); track entry.session_id) {
+            <div class="activity-card">
+              <div class="activity-icon" [class.completed]="entry.completed">
+                <i class="bi" [class.bi-check2-circle]="entry.completed" [class.bi-play-circle]="!entry.completed"></i>
+              </div>
+              <div class="activity-content">
+                <h4 class="activity-title">{{ entry.session_title }}</h4>
+                <p class="activity-meta">
+                  {{ entry.subject_name || 'Lesson' }} · {{ formatDate(entry.completed_at || '') }}
+                </p>
+              </div>
+              @if (entry.score !== null && entry.score !== undefined) {
+                <span class="activity-score">{{ entry.score }}%</span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    @if (apiService.apiError(); as error) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" aria-label="Dismiss error" (click)="apiService.clearError()">
+          <span class="visually-hidden">Dismiss error</span>
+        </button>
+      </div>
+    }
+  }
+</div>
+
+<!-- Notes Modal -->
+@if (showNotesModal()) {
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ selectedNote() ? 'Edit Note' : 'Create New Note' }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close notes modal"
+            (click)="closeNotesModal()"
+          >
+            <span class="visually-hidden">Close notes modal</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label
+                for="noteTitle"
+                class="form-label"
+                >Title</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="noteTitle"
+                [(ngModel)]="noteTitle"
+                placeholder="Enter note title"
+              />
+            </div>
+            <div class="mb-3">
+              <label
+                for="noteContent"
+                class="form-label"
+                >Content</label
+              >
+              <textarea
+                class="form-control"
+                id="noteContent"
+                rows="6"
+                [(ngModel)]="noteContent"
+                placeholder="Enter your note content"
+              ></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeNotesModal()"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="saveNote()"
+            [disabled]="!noteTitle().trim() || !noteContent().trim()"
+          >
+            {{ selectedNote() ? 'Update Note' : 'Create Note' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

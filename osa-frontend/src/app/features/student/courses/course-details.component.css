@@ -1,0 +1,50 @@
+.course-container {
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.course-header {
+  z-index: 100;
+}
+
+.lesson-card {
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.lesson-card:hover {
+  box-shadow: 0 4px 12px rgba(var(--color-teal-500-rgb), 0.12);
+  transform: translateY(-2px);
+}
+
+.lesson-card.active-lesson {
+  border-color: var(--color-primary);
+  background-color: rgba(var(--color-teal-500-rgb), 0.08);
+}
+
+.subject-card {
+  transition: all 0.3s;
+  border: 1px solid rgba(var(--color-teal-500-rgb), 0.12);
+  background-color: var(--color-surface);
+}
+
+.subject-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(var(--color-teal-500-rgb), 0.12);
+}
+
+.subject-header {
+  cursor: pointer;
+  background-color: rgba(var(--color-teal-500-rgb), 0.05);
+  transition: all 0.2s;
+}
+
+.subject-header:hover {
+  background-color: rgba(var(--color-teal-500-rgb), 0.1);
+}
+
+@media (max-width: 768px) {
+  .course-container {
+    padding: 1rem;
+  }
+}

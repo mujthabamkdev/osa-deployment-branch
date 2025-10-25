@@ -1,0 +1,58 @@
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  background: var(--color-surface);
+  border: 1px solid rgba(var(--color-teal-500-rgb), 0.12);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(var(--color-teal-500-rgb), 0.08);
+}
+
+.dashboard-card h4 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-card .value {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.section-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(var(--color-slate-500-rgb), 0.75);
+  margin-bottom: 1rem;
+}
+
+.table-responsive {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(var(--color-teal-500-rgb), 0.12);
+  overflow: hidden;
+}
+
+.table thead {
+  background: rgba(var(--color-teal-500-rgb), 0.12);
+  color: rgba(var(--color-slate-500-rgb), 0.75);
+}
+
+.badge-soft {
+  background-color: rgba(var(--color-teal-500-rgb), 0.12);
+  color: var(--color-primary);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
