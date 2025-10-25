@@ -25,13 +25,22 @@ OSA/
 
 ## Railway Configuration Files
 
-### Root Configuration (railway.toml)
-```toml
-[services.backend]
-path = "osa-backend"
-
-[services.frontend]
-path = "osa-frontend"
+### Root Configuration (railway.json)
+```json
+{
+  "services": {
+    "backend": {
+      "source": {
+        "path": "osa-backend"
+      }
+    },
+    "frontend": {
+      "source": {
+        "path": "osa-frontend"
+      }
+    }
+  }
+}
 ```
 
 This file explicitly defines the services in your monorepo for Railway to detect properly.
@@ -121,14 +130,23 @@ After deployment, you'll have:
 ### Common Issues:
 1. **"Script start.sh not found" or "Railpack could not determine how to build the app"**:
    - **Cause**: Railway is not detecting your monorepo structure properly
-   - **Solution**: Ensure `railway.toml` exists in the root directory with service definitions
+   - **Solution**: Ensure `railway.json` exists in the root directory with service definitions
    - **Check**: Verify the file contains:
-     ```toml
-     [services.backend]
-     path = "osa-backend"
-
-     [services.frontend]
-     path = "osa-frontend"
+     ```json
+     {
+       "services": {
+         "backend": {
+           "source": {
+             "path": "osa-backend"
+           }
+         },
+         "frontend": {
+           "source": {
+             "path": "osa-frontend"
+           }
+         }
+       }
+     }
      ```
 
 2. **Port Configuration**: Railway uses `$PORT` environment variable
