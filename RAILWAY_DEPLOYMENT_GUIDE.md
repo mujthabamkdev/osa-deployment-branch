@@ -29,21 +29,39 @@ OSA/
 ```json
 {
   "services": {
-    "backend": {
-      "source": {
-        "path": "osa-backend"
-      }
-    },
-    "frontend": {
-      "source": {
-        "path": "osa-frontend"
-      }
-    }
+    "backend": "railway.backend.json",
+    "frontend": "railway.frontend.json"
   }
 }
 ```
 
-This file explicitly defines the services in your monorepo for Railway to detect properly.
+### Service-Specific Configurations
+**Backend (railway.backend.json):**
+```json
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+  }
+}
+```
+
+**Frontend (railway.frontend.json):**
+```json
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm run build --prod"
+  },
+  "deploy": {
+    "startCommand": "npx serve dist/osa-frontend -s -l $PORT"
+  }
+}
+```
+
+These files define the build and deployment configuration for each service in your monorepo.
 
 ### Backend Configuration (osa-backend/railway.json)
 ```json
@@ -130,24 +148,11 @@ After deployment, you'll have:
 ### Common Issues:
 1. **"Script start.sh not found" or "Railpack could not determine how to build the app"**:
    - **Cause**: Railway is not detecting your monorepo structure properly
-   - **Solution**: Ensure `railway.json` exists in the root directory with service definitions
-   - **Check**: Verify the file contains:
-     ```json
-     {
-       "services": {
-         "backend": {
-           "source": {
-             "path": "osa-backend"
-           }
-         },
-         "frontend": {
-           "source": {
-             "path": "osa-frontend"
-           }
-         }
-       }
-     }
-     ```
+   - **Solution**: Ensure the following files exist in the root directory:
+     - `railway.json` (main config)
+     - `railway.backend.json` (backend service config)
+     - `railway.frontend.json` (frontend service config)
+   - **Check**: Verify the files contain the correct configurations as shown above
 
 2. **Port Configuration**: Railway uses `$PORT` environment variable
 3. **CORS Issues**: Update `CORS_ORIGINS` with the frontend URL
