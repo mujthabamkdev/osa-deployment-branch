@@ -38,14 +38,54 @@ OSA/
 ### Service-Specific Configurations
 **Backend (railway.backend.json):**
 ```json
+### Backend Configuration (osa-backend/railway.json)
+```json
 {
+  "$schema": "https://railway.com/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "RAILPACK"
   },
   "deploy": {
+    "runtime": "V2",
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "useLegacyStacker": false,
+    "multiRegionConfig": {
+      "asia-southeast1-eqsg3a": {
+        "numReplicas": 1
+      }
+    },
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
     "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
   }
 }
+```
+
+### Frontend Configuration (osa-frontend/railway.json)
+```json
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK",
+    "buildCommand": "npm run build --prod"
+  },
+  "deploy": {
+    "runtime": "V2",
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "useLegacyStacker": false,
+    "multiRegionConfig": {
+      "asia-southeast1-eqsg3a": {
+        "numReplicas": 1
+      }
+    },
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
+    "startCommand": "npx serve dist/osa-frontend -s -l $PORT"
+  }
+}
+```
 ```
 
 **Frontend (railway.frontend.json):**
@@ -148,11 +188,10 @@ After deployment, you'll have:
 ### Common Issues:
 1. **"Script start.sh not found" or "Railpack could not determine how to build the app"**:
    - **Cause**: Railway is not detecting your monorepo structure properly
-   - **Solution**: Ensure the following files exist in the root directory:
-     - `railway.json` (main config)
-     - `railway.backend.json` (backend service config)
-     - `railway.frontend.json` (frontend service config)
-   - **Check**: Verify the files contain the correct configurations as shown above
+   - **Solution**: Ensure `railway.json` files exist in each service directory:
+     - `osa-backend/railway.json`
+     - `osa-frontend/railway.json`
+   - **Check**: Verify the files use the correct schema `"https://railway.com/railway.schema.json"` and `RAILPACK` builder
 
 2. **Port Configuration**: Railway uses `$PORT` environment variable
 3. **CORS Issues**: Update `CORS_ORIGINS` with the frontend URL
