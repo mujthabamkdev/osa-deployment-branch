@@ -35,14 +35,18 @@ npm start
 
 ## Deployment
 
-See [SEVALA_DEPLOYMENT_GUIDE.md](SEVALA_DEPLOYMENT_GUIDE.md) for complete deployment instructions to Sevalla.
+See [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md) for complete deployment instructions to Railway.
 
 ### Quick Deploy:
 ```bash
-./prepare-sevalla-deployment.sh
+./prepare-railway-deployment.sh
 git push --set-upstream origin main
 ```
 
-Then create two services in Sevalla:
-- Backend service (Python) pointing to `osa-backend/` directory
-- Frontend service (Static/Node.js) pointing to `osa-frontend/` directory
+Then in Railway dashboard:
+1. Create new project from GitHub repo
+2. Railway will automatically detect both services
+3. Add PostgreSQL database
+4. Configure environment variables
+
+Railway URLs will be automatically generated for both services.
