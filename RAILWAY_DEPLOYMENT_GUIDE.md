@@ -11,6 +11,7 @@ This guide covers deploying the Online Sharia Academy application to Railway, wh
 ## Project Structure
 ```
 OSA/
+├── railway.toml      # Monorepo service configuration
 ├── osa-backend/     # FastAPI backend
 │   ├── railway.json
 │   ├── requirements.txt
@@ -23,6 +24,17 @@ OSA/
 ```
 
 ## Railway Configuration Files
+
+### Root Configuration (railway.toml)
+```toml
+[services.backend]
+path = "osa-backend"
+
+[services.frontend]
+path = "osa-frontend"
+```
+
+This file explicitly defines the services in your monorepo for Railway to detect properly.
 
 ### Backend Configuration (osa-backend/railway.json)
 ```json
@@ -107,10 +119,22 @@ After deployment, you'll have:
 ## Troubleshooting
 
 ### Common Issues:
-1. **Port Configuration**: Railway uses `$PORT` environment variable
-2. **CORS Issues**: Update `CORS_ORIGINS` with the frontend URL
-3. **Database Connection**: Ensure PostgreSQL plugin is added
-4. **Build Failures**: Check Railway build logs for specific errors
+1. **"Script start.sh not found" or "Railpack could not determine how to build the app"**:
+   - **Cause**: Railway is not detecting your monorepo structure properly
+   - **Solution**: Ensure `railway.toml` exists in the root directory with service definitions
+   - **Check**: Verify the file contains:
+     ```toml
+     [services.backend]
+     path = "osa-backend"
+
+     [services.frontend]
+     path = "osa-frontend"
+     ```
+
+2. **Port Configuration**: Railway uses `$PORT` environment variable
+3. **CORS Issues**: Update `CORS_ORIGINS` with the frontend URL
+4. **Database Connection**: Ensure PostgreSQL plugin is added
+5. **Build Failures**: Check Railway build logs for specific errors
 
 ### Environment Variables:
 - Railway automatically provides `DATABASE_URL` for PostgreSQL
