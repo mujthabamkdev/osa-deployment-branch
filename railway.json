@@ -1,0 +1,14 @@
+{
+  "services": {
+    "backend": {
+      "source": {
+        "path": "osa-backend"
+      }
+    },
+    "frontend": {
+      "source": {
+        "path": "osa-frontend"
+      }
+    }
+  }
+}
