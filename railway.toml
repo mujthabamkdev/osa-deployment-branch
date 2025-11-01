@@ -27,7 +27,7 @@ source = "osa-frontend"
 
 [services.build]
 builder = "nixpacks"
-buildCommand = "npm ci && npm run build --prod"
+buildCommand = "npm ci && npm run build:prod"
 
 [services.deploy]
 startCommand = "npx serve dist/osa-frontend -s -l $PORT"
