@@ -1,0 +1,13 @@
+# Nixpacks configuration for OSA Frontend (Angular/Node.js)
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "npm"]
+
+[phases.install]  
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build:prod"]
+
+[start]
+cmd = "npx serve dist/osa-frontend -s -l $PORT"

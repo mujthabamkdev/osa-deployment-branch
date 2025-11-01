@@ -1,5 +1,33 @@
-[services.backend]
-path = "osa-backend"
+# Railway monorepo configuration
+# Deploy each service separately by pointing Railway to the subdirectories
 
-[services.frontend]
-path = "osa-frontend"
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "never"
+
+# Backend service configuration
+[[services]]
+name = "osa-backend"
+source = "osa-backend"
+
+[services.build]
+builder = "nixpacks"
+
+[services.deploy]
+startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+
+# Frontend service configuration  
+[[services]]
+name = "osa-frontend" 
+source = "osa-frontend"
+
+[services.build]
+builder = "nixpacks"
+buildCommand = "npm ci && npm run build --prod"
+
+[services.deploy]
+startCommand = "npx serve dist/osa-frontend -s -l $PORT"
