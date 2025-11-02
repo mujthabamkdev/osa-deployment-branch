@@ -4,10 +4,10 @@
 nixPkgs = ["nodejs-18_x", "npm"]
 
 [phases.install]  
-cmds = ["npm ci"]
+cmds = ["npm ci", "npm install serve"]
 
 [phases.build]
 cmds = ["npm run build:prod"]
 
 [start]
-cmd = "npx serve dist/osa-frontend -s -l $PORT"
+cmd = "npx serve dist/osa-frontend -s -l $PORT -n"

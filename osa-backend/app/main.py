@@ -112,4 +112,17 @@ def read_root():
 
 @app.get("/health")
 def health_check():
-  return {"status": "healthy"}
+  """Health check endpoint for Railway deployment"""
+  try:
+    # Basic health check - can be enhanced to check database connectivity
+    return {
+      "status": "healthy",
+      "timestamp": "2024-11-02T12:00:00Z",
+      "service": "osa-backend"
+    }
+  except Exception as e:
+    return {
+      "status": "unhealthy", 
+      "error": str(e),
+      "service": "osa-backend"
+    }
