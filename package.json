@@ -1,0 +1,12 @@
+{
+  "name": "osa-monorepo-do-not-deploy",
+  "version": "1.0.0", 
+  "description": "❌ DO NOT DEPLOY FROM ROOT - Deploy backend and frontend services separately",
+  "scripts": {
+    "start": "./start.sh"
+  },
+  "private": true,
+  "engines": {
+    "node": "18.x"
+  }
+}
