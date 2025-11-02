@@ -2,7 +2,7 @@
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm ci && npm install serve && npm run build:prod"
+    "buildCommand": "npm ci && npm run build:prod && npm install -g serve"
   },
   "deploy": {
     "runtime": "V2",
@@ -10,7 +10,7 @@
     "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "startCommand": "npx serve dist/osa-frontend -s -l $PORT -n",
+    "startCommand": "serve dist/osa-frontend -s -l $PORT -n",
     "healthcheckPath": "/",
     "healthcheckTimeout": 100,
     "cronSchedule": ""
